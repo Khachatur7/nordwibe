@@ -1,0 +1,13 @@
+.convenience {
+  width: 95%;
+  height: 95%;
+  border-radius: 5px;
+  background: var(--backgroundColor);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  h4 {
+    font-size: 17px;
+    text-align: center;
+  }
+}

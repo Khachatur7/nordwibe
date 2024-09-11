@@ -1,0 +1,34 @@
+.chatComponent {
+  width: 100%;
+  height: auto;
+  padding: 10px 10px;
+  background: #FFF;
+  margin-top: 20px;
+  border-radius: 10px;
+  display: flex;
+}
+.chatComponent .image {
+  min-width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  background: #55C48F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chatComponent .image img {
+  width: 35px;
+  height: auto;
+}
+.chatComponent .text {
+  margin-left: 15px;
+}
+.chatComponent .text h1 {
+  color: var(--backgroundColor);
+  font-weight: 600;
+  font-size: 20px;
+}
+.chatComponent .text h4 {
+  color: var(--backgroundColor);
+  font-size: 16px;
+}/*# sourceMappingURL=styles.module.css.map */

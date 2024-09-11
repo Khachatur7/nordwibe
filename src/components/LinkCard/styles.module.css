@@ -1,0 +1,33 @@
+.LinkCard {
+  width: 100%;
+  aspect-ratio: 1/1.2;
+  position: relative;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease;
+  padding: 0.5rem;
+}
+.LinkCard img {
+  width: 100%;
+  min-height: 80%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.LinkCard h3 {
+  text-align: center;
+  font-weight: 500;
+  font-size: clamp(0.9rem, 3vw, 1.3rem);
+  color: var(--backgroundColor);
+}
+@media screen and (min-width: 800px) {
+  .LinkCard h3 {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+  }
+}
+.LinkCard:hover {
+  transform: scale(102%);
+}/*# sourceMappingURL=styles.module.css.map */

@@ -1,0 +1,294 @@
+.flat {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+.flat .module {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background: rgba(85, 163, 196, 0.4235294118);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flat .module .swiper_module {
+  width: 50%;
+  height: 50%;
+}
+.flat .module .swiper_module .slide {
+  width: 100%;
+  height: 100%;
+}
+.flat .module .swiper_module .slide img {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+}
+.flat .container {
+  padding-bottom: 20px;
+  margin-top: 30px;
+  width: 90%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #FFF;
+}
+@media (min-width: 1050px) {
+  .flat .container {
+    width: 50%;
+  }
+}
+.flat .container .swiper {
+  width: 100%;
+  height: 380px;
+  display: flex;
+}
+.flat .container .swiper .slide {
+  width: 100%;
+  height: 100%;
+}
+.flat .container .swiper .slide img {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+}
+.flat .container .banner img {
+  width: 100%;
+  height: auto;
+}
+.flat .container .containerUser {
+  padding: 0 10px;
+  width: 100%;
+  height: -moz-max-content;
+  height: max-content;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flat .container .containerUser .userCard {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+}
+.flat .container .containerUser .userCard .avatar {
+  min-width: 50px;
+  min-height: 50px;
+  border-radius: 100%;
+  background: #55A3C4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flat .container .containerUser .userCard .avatar img {
+  width: 20px;
+  height: auto;
+}
+.flat .container .containerUser .userCard .userInformation {
+  margin-left: 10px;
+}
+.flat .container .containerUser .userCard .userInformation h4 {
+  color: var(--backgroundColor);
+}
+.flat .container .containerUser h1 {
+  color: var(--backgroundColor);
+  font-size: 17px;
+  font-weight: 600;
+}
+.flat .container .price {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 20px;
+  color: var(--backgroundColor);
+  margin-left: 10px;
+}
+.flat .container .commun {
+  font-size: 16px;
+  color: #969696;
+  margin-left: 10px;
+}
+.flat .container .flatInfo {
+  padding: 0 10px;
+  margin-top: 20px;
+}
+.flat .container .flatInfo .blocks ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: start;
+}
+.flat .container .flatInfo .blocks ul li {
+  color: #000;
+  padding: 5px 15px;
+  border: 1px solid #000;
+  border-radius: 20px;
+  font-size: 13px;
+}
+.flat .container .flatInfo .bottomBlocks {
+  padding: 0 10px;
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+.flat .container .flatInfo .bottomBlocks div ul li {
+  color: #000;
+  font-size: 13px;
+}
+.flat .container .userButtons {
+  margin-top: 20px;
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flat .container .userButtons div {
+  display: flex;
+}
+.flat .container .userButtons div button {
+  padding: 9px 30px;
+  border-radius: 20px;
+  background: var(--backgroundColor);
+  border: 0;
+  font-size: 13px;
+}
+.flat .container .userButtons div:not(:first-child) {
+  margin-left: 15px;
+}
+.flat .container .userButtons div a:not(:first-child) {
+  margin-left: 15px;
+}
+.flat .container .userButtons div img {
+  width: 30px;
+  height: auto;
+}
+.flat .container .userButtons div img:not(:first-child) {
+  margin-left: 15px;
+}
+.flat .container .description {
+  padding: 0 10px;
+  margin-top: 20px;
+}
+.flat .container .description h4 {
+  text-align: center;
+  color: var(--backgroundColor);
+  font-size: 19px;
+  font-weight: 500;
+}
+.flat .container .description p {
+  margin-top: 5px;
+  font-size: 16px;
+  color: #000;
+}
+.flat .container .all_eq {
+  width: 97%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-left: 1.5%;
+}
+.flat .container .all_eq .p {
+  color: var(--backgroundColor);
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+.flat .container .all_eq .equipments {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  overflow-x: auto;
+  padding: 10px 0px;
+}
+.flat .container .all_eq .equipments .equipment {
+  padding: 30px 40px;
+  border-radius: 5px;
+  background: var(--backgroundColor);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flat .container .all_eq .equipments .equipment h4 {
+  font-size: 17px;
+  text-align: center;
+}
+.flat .container .all_eq .equipments::-webkit-scrollbar {
+  width: 4px !important;
+}
+.flat .container .all_eq .equipments::-webkit-scrollbar-thumb {
+  width: 4px !important;
+  background: var(--backgroundColor);
+  border-radius: 10px;
+}
+.flat .container .all_eq .equipments::-webkit-scrollbar-track {
+  width: 4px !important;
+  background: #fff;
+  border-radius: 15px;
+}
+.flat .container .conveniences {
+  margin-top: 20px;
+  padding: 0 10px;
+}
+.flat .container .conveniences .cards {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.flat .container .conveniences .cards .conv {
+  width: 200px;
+  height: 90px;
+}
+.flat .container .conveniences .p {
+  color: var(--backgroundColor);
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.flat .container .conveniences p {
+  color: var(--backgroundColor);
+  margin-top: 10px;
+  font-size: 13px;
+}
+.flat .container .location {
+  margin-top: 20px;
+}
+.flat .container .location h4 {
+  text-align: center;
+  color: var(--backgroundColor);
+  font-size: 19px;
+  font-weight: 500;
+}
+.flat .container .location img {
+  margin-top: 10px;
+}
+.flat .container .location .info {
+  padding: 0 10px;
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+.flat .container .location .info div ul li {
+  color: #000;
+  font-size: 13px;
+}
+.flat .container .about {
+  margin-top: 20px;
+  padding: 0 10px;
+}
+.flat .container .about h4 {
+  text-align: center;
+  color: var(--backgroundColor);
+  font-size: 19px;
+  font-weight: 500;
+}
+.flat .container .about .cards {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}/*# sourceMappingURL=styles.module.css.map */
