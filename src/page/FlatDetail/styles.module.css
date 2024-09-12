@@ -6,6 +6,10 @@
   justify-content: center;
   padding-bottom: 10px;
 }
+.flat :root {
+  --swiper-theme-color: #5755c4;
+  --swiper-navigation-color: #5755c4;
+}
 .flat .module {
   position: absolute;
   top: 0;
@@ -13,22 +17,48 @@
   z-index: 10;
   width: 100%;
   height: 100%;
-  background: rgba(85, 163, 196, 0.4235294118);
+  background: rgba(255, 255, 255, 0.568627451);
   display: flex;
   justify-content: center;
   align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.flat .module .exit {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 70px;
+  height: 70px;
+  cursor: pointer;
+}
+.flat .module .exit:hover {
+  animation: exit 0.8s backwards infinite alternate;
+}
+@keyframes exit {
+  33% {
+    transform: rotate(25deg);
+  }
+  67% {
+    transform: rotate(-15deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 .flat .module .swiper_module {
-  width: 50%;
-  height: 50%;
+  width: 70%;
+  height: 100%;
 }
 .flat .module .swiper_module .slide {
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
 }
 .flat .module .swiper_module .slide img {
   width: 100%;
-  height: 100%;
   background-size: contain;
 }
 .flat .container {
@@ -37,7 +67,7 @@
   width: 90%;
   border-radius: 10px;
   overflow: hidden;
-  background: #FFF;
+  background: #fff;
 }
 @media (min-width: 1050px) {
   .flat .container {
@@ -77,17 +107,15 @@
   align-items: center;
 }
 .flat .container .containerUser .userCard .avatar {
+  width: 50px;
+  height: 50px;
   min-width: 50px;
   min-height: 50px;
   border-radius: 100%;
-  background: #55A3C4;
+  background: #55a3c4;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.flat .container .containerUser .userCard .avatar img {
-  width: 20px;
-  height: auto;
 }
 .flat .container .containerUser .userCard .userInformation {
   margin-left: 10px;
@@ -184,6 +212,14 @@
   font-size: 16px;
   color: #000;
 }
+.flat .container .description span {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 5px;
+  font-size: 16px;
+  color: #000;
+}
 .flat .container .all_eq {
   width: 97%;
   display: flex;
@@ -205,7 +241,7 @@
   padding: 10px 0px;
 }
 .flat .container .all_eq .equipments .equipment {
-  padding: 30px 40px;
+  padding: 20px 40px;
   border-radius: 5px;
   background: var(--backgroundColor);
   display: flex;
@@ -239,11 +275,11 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 10px;
 }
 .flat .container .conveniences .cards .conv {
   width: 200px;
-  height: 90px;
+  height: 70px;
 }
 .flat .container .conveniences .p {
   color: var(--backgroundColor);
@@ -277,6 +313,19 @@
   color: #000;
   font-size: 13px;
 }
+.flat .container .location .copy_location {
+  color: #5755c4;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  margin-left: 2%;
+  margin-top: 4px;
+  font-size: 15px;
+}
+.flat .container .location .copy_location:hover {
+  text-decoration: underline;
+}
 .flat .container .about {
   margin-top: 20px;
   padding: 0 10px;
@@ -290,5 +339,6 @@
 .flat .container .about .cards {
   width: 100%;
   display: grid;
+  font-size: 13px;
   grid-template-columns: repeat(3, 1fr);
 }/*# sourceMappingURL=styles.module.css.map */

@@ -29,7 +29,6 @@ export default function TextAndMap(props: QuestionProps) {
       setAnswer(firstGeoObject.getAddressLine());
     });
   };
-// Пугачев революционный проспект дом 271
   const inputOnChange = async (
     value: React.FormEvent<HTMLInputElement>,
     ymaps?: any
@@ -46,7 +45,7 @@ export default function TextAndMap(props: QuestionProps) {
   };
 
   function handleSubmit(e?: React.FormEvent<HTMLFormElement>, ymaps?: any) {
-    if (addressCoord) {
+    if (addressCoord && answer.trim()) {
       props.onAnswer(JSON.stringify(addressCoord));
     }
   }

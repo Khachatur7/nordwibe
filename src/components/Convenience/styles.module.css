@@ -6,8 +6,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.convenience h4 {
-  font-size: 17px;
-  text-align: center;
+  white-space: nowrap;
+  font-size: 15px;
 }/*# sourceMappingURL=styles.module.css.map */

@@ -4,13 +4,16 @@
   width: 100%;
   border-radius: 10px;
   overflow: hidden;
-  background: #FFF;
+  background: #fff;
 
   .banner {
-    img {
-      width: 100%;
-      height: auto;
-    }
+      .slide {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
   }
 
   .containerUser {
@@ -27,18 +30,19 @@
       align-items: center;
 
       .avatar {
+        width: 50px;
+        height: 50px;
+        max-width: 50px;
+        max-height:50px ;
         min-width: 50px;
         min-height: 50px;
         border-radius: 100%;
-        background: #55A3C4;
+        background: #55a3c4;
         display: flex;
         align-items: center;
         justify-content: center;
 
-        img {
-          width: 20px;
-          height: auto;
-        }
+       
       }
 
       .userInformation {
@@ -65,12 +69,12 @@
     margin-left: 20px;
   }
 
-.commun{
-  font-size: 15px;
-  color: #969696;
-  margin-left: 20px;
-}
-  
+  .commun {
+    font-size: 15px;
+    color: #969696;
+    margin-left: 20px;
+  }
+
   .flatInfo {
     padding: 0 20px;
     margin-top: 20px;

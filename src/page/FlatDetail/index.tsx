@@ -2,7 +2,6 @@
 
 import Convenience from "@/components/Convenience";
 import IconCard from "@/components/IconCard";
-import { conveniences, flats } from "@/config";
 import styles from "@/page/FlatDetail/styles.module.scss";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,8 +9,6 @@ import { FC, useEffect, useRef, useState } from "react";
 import { notFound, usePathname } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store";
-import { addToFavourites } from "@/store/slices/user";
-import Like from "@/../public/icons/like.svg";
 import { useTypedSelector } from "@/hooks/selector.hook";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -19,57 +16,44 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { A11y, Navigation, Pagination, Scrollbar } from "swiper/modules";
-import {
-  YMaps,
-  Map,
-  Placemark,
-  GeoObject,
-} from "@pbe/react-yandex-maps";
+import { YMaps, Map, GeoObject } from "@pbe/react-yandex-maps";
 import TickLOGO from "../../../public/svgs/tick";
+import { IRealFlat } from "@/interfaces/flat.interface";
+import { FlatList, users, usersList } from "@/config";
 
 const FlatDetail: FC<{ id: string }> = ({ id }) => {
-  const flat = flats.find((f) => f.id === Number(id));
-  const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();
+
+  const [flat, setFlat] = useState<IRealFlat>(
+    FlatList[+pathname.split("/")[pathname.split("/").length - 1] - 1]
+  );
   const [open, setOpen] = useState(false);
+  const [addressCoord, setAddressCoord] = useState([55.75, 37.57]);
   const user = useTypedSelector((selector) => selector.userSlice.user);
-  const [addressCoord, setAddressCoord] = useState();
   const mapRef = useRef();
   const [district, setDistrict] = useState<string>("");
-
-  const onClickToMap = async (e: any) => {
-    const coords = e.get("coords");
-    setAddressCoord(coords);
-  };
-
   const geocode = (ymaps: any) => {
-    
-  //   ymaps.multiRouter.MultiRoute({
-  //     referencePoints: [
-  //       [55.75, 37.57],
-  //         'метро Арбатская'
-  //     ],
-  //     params: {
-  //       routingMode: "pedestrian"  
-  //     }
-  // }, {
-        
-  //       boundsAutoApply: true
-  // });
-    ymaps
-      .geocode([55.75, 37.57], {
-        kind: "district",
-        results: 1,
-      })
-      .then((res: any) => {
-        let firstGeoObject = res.geoObjects.get(0);
-        setDistrict(firstGeoObject.getAddressLine());
-      });
+    ymaps.geocode(flat.address).then((res: any) => {
+      let firstGeoObject = res.geoObjects.get(0);
+      setAddressCoord(firstGeoObject.geometry._coordinates);
+      ymaps
+        .geocode(firstGeoObject.geometry._coordinates, {
+          kind: "district",
+          results: 1,
+        })
+        .then((res: any) => {
+          let firstGeoObject = res.geoObjects.get(0);
+          setDistrict(firstGeoObject.getAddressLine());
+        });
+    });
   };
 
-  useEffect(() => {
-  
-  }, []);
+  const copyGeoLink = (longitude: number, latitude: number) => {
+    const url = `https://yandex.ru/maps/?ll=${longitude},${latitude}&z=15`;
+    navigator.clipboard.writeText(url);
+  };
+
+  // useEffect(() => { }, []);
 
   if (!flat) return notFound();
 
@@ -110,18 +94,16 @@ const FlatDetail: FC<{ id: string }> = ({ id }) => {
               navigation
               className={styles.swiper_module}
             >
-              <SwiperSlide className={styles.slide}>
-                <img src={"/flat.png"} alt="banner" />
-              </SwiperSlide>
-              <SwiperSlide className={styles.slide}>
-                <img src={"/flat.png"} alt="banner" />
-              </SwiperSlide>
-              <SwiperSlide className={styles.slide}>
-                <img src={"/flat.png"} alt="banner" />
-              </SwiperSlide>
-              <SwiperSlide className={styles.slide}>
-                <img src={"/flat.png"} alt="banner" />
-              </SwiperSlide>
+              {flat.photos_ids.map((el) => {
+                return (
+                  <SwiperSlide
+                    onClick={() => setOpen(true)}
+                    className={styles.slide}
+                  >
+                    <img src={el} alt="banner" />
+                  </SwiperSlide>
+                );
+              })}
             </Swiper>
           </div>
         </>
@@ -138,87 +120,88 @@ const FlatDetail: FC<{ id: string }> = ({ id }) => {
             pagination={{ clickable: true }}
             className={styles.swiper}
           >
-            <SwiperSlide onClick={() => setOpen(true)} className={styles.slide}>
-              <img src={"/flat.png"} alt="banner" />
-            </SwiperSlide>
-            <SwiperSlide onClick={() => setOpen(true)} className={styles.slide}>
-              <img src={"/flat.png"} alt="banner" />
-            </SwiperSlide>
-            <SwiperSlide onClick={() => setOpen(true)} className={styles.slide}>
-              <img src={"/flat.png"} alt="banner" />
-            </SwiperSlide>
-            <SwiperSlide onClick={() => setOpen(true)} className={styles.slide}>
-              <img src={"/flat.png"} alt="banner" />
-            </SwiperSlide>
+            {flat.photos_ids.map((el) => {
+              return (
+                <SwiperSlide
+                  onClick={() => setOpen(true)}
+                  className={styles.slide}
+                >
+                  <img src={el} alt="banner" />
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
         </div>
         <div className={styles.containerUser}>
           <div className={styles.userCard}>
-            <Link href={`/profile/${flat.user.id}`}>
+            <Link href={`/profile/${flat.creator_id + 1}`}>
               <div className={styles.avatar}>
-                <Image
-                  src={"/icons/userProfile.svg"}
+                <img
+                  src={
+                    usersList[flat.creator_id].avatar
+                      ? usersList[flat.creator_id].avatar
+                      : "/icons/userProfile.svg"
+                  }
                   alt="avatar"
-                  width={100}
-                  height={100}
+                  width={"100%"}
+                  height={"100%"}
                 />
               </div>
             </Link>
             <div className={styles.userInformation}>
-              <Link href={`/profile/${flat.user.id}`}>
-                <h1>
-                  {flat.user.name}, {flat.user.age}
-                </h1>
+              <Link href={`/profile/`}>
+                <h1>{usersList[flat.creator_id].first_name}</h1>
               </Link>
-              <h4>{flat.user.city}</h4>
+              <h4>{usersList[flat.creator_id].my_town}</h4>
             </div>
           </div>
           <h1>XX%</h1>
         </div>
-        <h3 className={styles.price}>15000руб/мес</h3>
+        <h3 className={styles.price}>{flat.cost}руб/мес</h3>
         <h3 className={styles.commun} onClick={() => setOpen(true)}>
-          Комуналка:XXXXруб/мес
+          Комуналка:{flat.cost_utilities}руб/мес
         </h3>
         <div className={styles.flatInfo}>
           <div className={styles.blocks}>
             <ul>
-              <li>Общая комната</li>
-              <li>Без залога</li>
-              <li>x/y этаж</li>
-              <li>Снимаю эту квартиру</li>
-              <li>Можно с животными</li>
-              <li>Не курить</li>
+              <li>
+                {flat.count_neighbors === 1
+                  ? "Общая комната"
+                  : "Изолированная комната"}
+              </li>
+              <li>{flat.is_have_bail ? "Есть залог" : "Без залога"}</li>
+              <li>
+                {flat.floor}/{flat.building_floor} этаж
+              </li>
+              <li>
+                {flat.i_am_owner ? "Я собственник" : "Снимаю эту квартиру"}
+              </li>
+              <li>
+                {flat.is_possible_animals
+                  ? "Можно с животными"
+                  : "Без животных"}
+              </li>
+              <li>{flat.is_possible_smoke ? "Можно курить" : "Не курить"}</li>
             </ul>
           </div>
           <div className={styles.bottomBlocks}>
             <div>
               <ul>
                 <li>Адрес:</li>
-                <li>
-                  Район:{" "}
-                  {
-                    district
-                      .split(",")
-                      [district.split(",").length - 1].split(" ")[
-                      district
-                        .split(",")
-                        [district.split(",").length - 1].split(" ").length - 1
-                    ]
-                  }
-                </li>
-                <li>Удаленность от</li>
+                <li>Район: {district}</li>
+                {/* <li>Удаленность от</li> */}
               </ul>
             </div>
           </div>
         </div>
         <div className={styles.userButtons}>
           <div>
-            <Link href={`/profile/${flat.user.id}`}>
-              <button>Написать</button>
-            </Link>
+            {/* <Link href={`/profile/${flat.user.id}`}> */}
+            <button>Написать</button>
+            {/* </Link> */}
           </div>
           <div>
-            <Link href={pathname}>
+            {/* <Link href={pathname}>
               <Image
                 src={`/icons/like${
                   user.favourites.flats.find((fl) => fl.id === flat.id)
@@ -228,22 +211,22 @@ const FlatDetail: FC<{ id: string }> = ({ id }) => {
                 alt="like"
                 width={100}
                 height={100}
-                onClick={() =>
-                  dispatch(addToFavourites({ type: "flats", value: flat }))
-                }
+                // onClick={() =>
+                //   dispatch(addToFavourites({ type: "flats", value: flat }))
+                // }
               />
-            </Link>
+            </Link> */}
           </div>
         </div>
         <div className={styles.description}>
-          <p>Здесь представлено описание предложения от автора</p>
-          {true && (
+          <p>{flat.description}</p>
+          {flat.accessibility_type && (
             <span>
               {" "}
               <TickLOGO /> повышенная доступность
             </span>
           )}
-          {true && (
+          {flat.is_have_fines && (
             <span>
               {" "}
               <TickLOGO /> есть лист ответственности
@@ -253,23 +236,86 @@ const FlatDetail: FC<{ id: string }> = ({ id }) => {
         <div className={styles.conveniences}>
           <p className={styles.p}>удобства</p>
           <div className={styles.cards}>
-            {conveniences.map((convenience) => (
-              <div className={styles.conv}>
-                <Convenience label={convenience} />
-              </div>
-            ))}
+            <div className={styles.conv}>
+              {flat.is_have_wifi && <Convenience label="вайфай" />}
+            </div>
+            <div className={styles.conv}>
+              {flat.is_have_conditioner && <Convenience label="кондиционер" />}
+            </div>
+            <div className={styles.conv}>
+              {flat.is_have_balcony && <Convenience label="балкон" />}
+            </div>
+            <div className={styles.conv}>
+              {flat.is_have_security && <Convenience label="консьерж" />}
+            </div>
+            <div className={styles.conv}>
+              {flat.is_have_parking_space && (
+                <Convenience label="парковочное место" />
+              )}{" "}
+            </div>
+            <div className={styles.conv}>
+              {flat.is_have_horizontal_bars && (
+                <Convenience label="спортплощадка" />
+              )}{" "}
+            </div>
+            <div className={styles.conv}>
+              {flat.is_have_elevator && <Convenience label="лифт" />}{" "}
+            </div>
+            <div className={styles.conv}>
+              {flat.is_have_garbage_chute && (
+                <Convenience label="мусоропровод" />
+              )}{" "}
+            </div>
+            <div className={styles.conv}>
+              {flat.is_have_transport_close && (
+                <Convenience label="транспорт рядом" />
+              )}{" "}
+            </div>
           </div>
-          <p>Еще удобства</p>
         </div>
         <div className={styles.all_eq}>
           <p className={styles.p}>Оснащенность квартиры</p>
-
           <div className={styles.equipments}>
-            {conveniences.map((convenience) => (
+            {flat.is_have_tv && (
               <div className={styles.equipment}>
-                <Convenience label={convenience} />
+                <Convenience label="телевизор" />
               </div>
-            ))}
+            )}
+            {flat.is_have_guest_cabinet && (
+              <div className={styles.equipment}>
+                <Convenience label="отдельный шкаф" />
+              </div>
+            )}
+            {flat.is_have_hair_dryer && (
+              <div className={styles.equipment}>
+                <Convenience label="фен" />
+              </div>
+            )}
+            {flat.is_have_guest_table && (
+              <div className={styles.equipment}>
+                <Convenience label="отдельный стол" />
+              </div>
+            )}
+            {flat.is_have_iron && (
+              <div className={styles.equipment}>
+                <Convenience label="утюг" />
+              </div>
+            )}
+            {flat.is_have_dishwasher && (
+              <div className={styles.equipment}>
+                <Convenience label="посудомойка" />
+              </div>
+            )}
+            {flat.is_have_washing_machine && (
+              <div className={styles.equipment}>
+                <Convenience label="стиральная машина" />
+              </div>
+            )}
+            {flat.is_have_dryer && (
+              <div className={styles.equipment}>
+                <Convenience label="сушилка" />
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.location}>
@@ -279,9 +325,8 @@ const FlatDetail: FC<{ id: string }> = ({ id }) => {
               onLoad={(ymaps) => geocode(ymaps)}
               style={{ width: "98%", height: "250px", marginLeft: "1%" }}
               instanceRef={mapRef}
-              onClick={(e: any) => onClickToMap(e)}
-              defaultState={{
-                center: [55.75, 37.57],
+              state={{
+                center: addressCoord,
                 zoom: 9,
                 controls: ["zoomControl", "fullscreenControl"],
               }}
@@ -292,29 +337,62 @@ const FlatDetail: FC<{ id: string }> = ({ id }) => {
                 "geocode",
               ]}
             >
-              <Placemark defaultGeometry={[55.75, 37.57]} />
-              {addressCoord && (
-                <GeoObject
-                  geometry={{
-                    type: "Point",
-                    coordinates: addressCoord,
-                  }}
-                />
-              )}
+              <GeoObject
+                geometry={{
+                  type: "Point",
+                  coordinates: addressCoord,
+                }}
+              />
             </Map>
           </YMaps>
+          <span
+            className={styles.copy_location}
+            onClick={() => copyGeoLink(addressCoord[1], addressCoord[0])}
+          >
+            скопировать расположение
+          </span>
         </div>
         <div className={styles.about}>
           <h4>О квартире</h4>
           <div className={styles.cards}>
-            <IconCard label={`Срок : меньше месяца`} icon="term" />
-            <IconCard label={`Комнаты : n комнат`} icon="rooms" />
-            <IconCard label={`Ремонт : современный`} icon="repair" />
-            <IconCard label={`Тип дома : советский фонд`} icon="term" />
-            <IconCard label={`Шумоизоляция : нет шумов`} icon="rooms" />
             <IconCard
-              label={`Солнечная сторона : солнце попадает`}
-              icon="repair"
+              label={`Срок : ${
+                flat.count_days_to / 30 < 1
+                  ? "меньше месяца"
+                  : Math.floor(flat.count_days_to / 30)
+              } ${
+                Math.floor(flat.count_days_to / 30) == 1
+                  ? "месяц"
+                  : Math.floor(flat.count_days_to / 30) == 2 ||
+                    Math.floor(flat.count_days_to / 30) == 3 ||
+                    Math.floor(flat.count_days_to / 30) == 4
+                  ? "месяца"
+                  : "месяцев"
+              }`}
+              icon="term"
+            />
+            <IconCard
+              label={`Комнаты : ${+flat.count_rooms} ${
+                +flat.count_rooms == 1
+                  ? "комната"
+                  : flat.count_rooms == 2 ||
+                    flat.count_rooms == 3 ||
+                    flat.count_rooms == 4
+                  ? "комнаты"
+                  : "комнат"
+              }`}
+              icon="rooms"
+            />
+            <IconCard label={`Ремонт : ${flat.repair_type}`} icon="repair" />
+            <IconCard label={`Тип дома : ${flat.building_type}`} icon="house" />
+            <IconCard
+              label={`Шумоизоляция : ${flat.sound_insulation_type}`}
+              icon="volume"
+            />
+            <IconCard
+              // солнце попадает
+              label={`Солнечная сторона : ${flat.is_sunny_side ? "Да" : "Нет"}`}
+              icon="sun"
             />
           </div>
         </div>

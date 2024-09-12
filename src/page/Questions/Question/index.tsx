@@ -15,6 +15,7 @@ import ToggleList from "@/components/Questions/ToggleList";
 import CheckList from "@/components/Questions/CheckList";
 import TextAndMap from "@/components/Questions/TextAndMap";
 import Description from "@/components/Questions/Description";
+import NumberInput from "@/components/Questions/NumberInput";
 
 type QuestionProps = {
   id: string;
@@ -34,8 +35,7 @@ export default function Question({ id }: QuestionProps) {
       count_days_to: 0,
     },
     { cost: 0 },
-  ])
-
+  ]);
 
   useEffect(() => {
     setCurrentId(Number.parseInt(id) - 1);
@@ -55,7 +55,7 @@ export default function Question({ id }: QuestionProps) {
 
   return (
     <>
-     {question?.type === "textAndMap" && (
+      {question?.type === "textAndMap" && (
         <TextAndMap
           onAnswer={handleAnswer}
           question={question}
@@ -126,12 +126,11 @@ export default function Question({ id }: QuestionProps) {
         ></TwoNumberInput>
       )}
       {question?.type === "number" && (
-        <TextQuestion
+        <NumberInput
           onAnswer={handleAnswer}
           question={question}
-          type={question.type}
-          answerVal={question.answer}
-        ></TextQuestion>
+          answer={question.answer}
+        ></NumberInput>
       )}
       {question?.type === "checklist" && (
         <CheckList
@@ -159,6 +158,13 @@ export default function Question({ id }: QuestionProps) {
           question={question}
           answerVal={question.answer}
         ></Description>
+      )}
+      {question?.type === "days" && (
+        <TwoNumberInput
+          onAnswer={handleAnswer}
+          question={question}
+          answer={question.answer}
+        ></TwoNumberInput>
       )}
     </>
   );

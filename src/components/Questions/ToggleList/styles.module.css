@@ -1,7 +1,10 @@
-.options {
-  width: 100%;
-  margin-bottom: 2rem;
-}
-.options input {
-  cursor: pointer;
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 40px;
+  max-width: 400px;
+  font-size: 1rem;
 }/*# sourceMappingURL=styles.module.css.map */

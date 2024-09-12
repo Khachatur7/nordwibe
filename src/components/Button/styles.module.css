@@ -1,6 +1,7 @@
 .button {
   font-family: inherit;
   margin-top: auto;
+  margin-bottom: 30px;
   width: 100%;
   font-size: 1rem;
   padding: 1rem;

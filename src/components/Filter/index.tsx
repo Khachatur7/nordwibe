@@ -1,9 +1,6 @@
 import {
-  ChangeEvent,
   Dispatch,
   FC,
-  MutableRefObject,
-  RefObject,
   SetStateAction,
   useEffect,
   useRef,
@@ -22,56 +19,10 @@ import {
   repair,
   soundIsolation,
 } from "@/config";
+import { IFilterResult } from "@/interfaces/filter_answer.interface";
 
 interface IFilter {
   setFilter?: Dispatch<SetStateAction<boolean>>;
-}
-
-interface IFilterResult {
-  search_point: number[];
-  distance: number;
-  i_am_owner: boolean;
-  min_count_days: number;
-  max_count_days: number;
-  min_cost: number;
-  max_cost: number;
-  is_have_bail: boolean;
-  is_have_fines: boolean;
-  min_cost_utilities: number;
-  max_cost_utilities: number;
-  min_count_rooms: number;
-  max_count_rooms: number;
-  min_floor: number;
-  max_floor: number;
-  min_building_floor: number;
-  max_building_floor: number;
-  repair_type: number;
-  building_type: number;
-  sound_insulation_type: number;
-  accessibility_type: number;
-  is_sunny_side: boolean;
-  is_have_elevator: boolean;
-  is_have_balcony: boolean;
-  is_have_parking_space: boolean;
-  is_have_security: boolean;
-  is_have_horizontal_bars: boolean;
-  is_have_conditioner: boolean;
-  is_have_garbage_chute: boolean;
-  is_have_wifi: boolean;
-  is_have_transport_close: boolean;
-  is_possible_smoke: boolean;
-  is_possible_animals: boolean;
-  is_have_washing_machine: boolean;
-  is_have_dryer: boolean;
-  is_have_iron: boolean;
-  is_have_dishwasher: boolean;
-  is_have_hair_dryer: boolean;
-  is_have_tv: boolean;
-  is_have_guest_table: boolean;
-  is_have_guest_cabinet: boolean;
-  min_count_photos: number;
-  search: string;
-  is_favorite: boolean;
 }
 
 const Filter: FC<IFilter> = ({ setFilter }) => {
@@ -79,17 +30,28 @@ const Filter: FC<IFilter> = ({ setFilter }) => {
   const distance = useRef<HTMLInputElement>(null);
   const min_count_days = useRef<HTMLInputElement>(null);
   const max_count_days = useRef<HTMLInputElement>(null);
+  const [daysError, setDaysError] = useState(false);
   const min_cost = useRef<HTMLInputElement>(null);
   const max_cost = useRef<HTMLInputElement>(null);
+  const [costError, setCostError] = useState(false);
   const min_cost_utilities = useRef<HTMLInputElement>(null);
   const max_cost_utilities = useRef<HTMLInputElement>(null);
+  const [utilError, setUtilError] = useState(false);
   const min_count_rooms = useRef<HTMLInputElement>(null);
   const max_count_rooms = useRef<HTMLInputElement>(null);
+  const [roomError, setRoomError] = useState(false);
   const min_floor = useRef<HTMLInputElement>(null);
   const max_floor = useRef<HTMLInputElement>(null);
+  const [floorError, setFloorError] = useState(false);
   const min_building_floor = useRef<HTMLInputElement>(null);
   const max_building_floor = useRef<HTMLInputElement>(null);
+  const [buildError, setBuildError] = useState(false);
   const min_count_photos = useRef<HTMLInputElement>(null);
+  const [activeRepair, setActiveRepair] = useState(0);
+  const [activeBuild, setActiveBuild] = useState(0);
+  const [activeSound, setActiveSound] = useState(0);
+  // const [activeRepair, setActiveRepair] = useState(0);
+
   const [map, setMap] = useState(false);
   const [city, setCity] = useState<string>("Москва");
   const mapRef = useRef();
@@ -104,7 +66,7 @@ const Filter: FC<IFilter> = ({ setFilter }) => {
     });
   };
 
-  const inputOnChange = async (
+  const HandleMapInput = async (
     value: React.FormEvent<HTMLInputElement>,
     ymaps?: any
   ) => {
@@ -114,12 +76,63 @@ const Filter: FC<IFilter> = ({ setFilter }) => {
       setAddressCoord(firstGeoObject.geometry._coordinates);
     });
   };
+
   const handleInputChange = (inputRef: React.RefObject<HTMLInputElement>) => {
     if (inputRef.current) {
       const newValue = inputRef.current.value;
+      CheckError();
       // Фильтруем только числовые значения
       if (!/^\d*$/.test(newValue)) {
         inputRef.current.value = newValue.replace(/[^\d]/g, "");
+      }
+    }
+  };
+
+  const CheckError = () => {
+    if (min_count_days.current && max_count_days.current) {
+      if (+min_count_days.current.value > +max_count_days.current.value) {
+        setDaysError(true);
+      } else {
+        setDaysError(false);
+      }
+    }
+    if (min_cost.current && max_cost.current) {
+      if (+min_cost.current.value > +max_cost.current.value) {
+        setCostError(true);
+      } else {
+        setCostError(false);
+      }
+    }
+    if (min_cost_utilities.current && max_cost_utilities.current) {
+      if (
+        +min_cost_utilities.current.value > +max_cost_utilities.current.value
+      ) {
+        setUtilError(true);
+      } else {
+        setUtilError(false);
+      }
+    }
+    if (min_building_floor.current && max_building_floor.current) {
+      if (
+        +min_building_floor.current.value > +max_building_floor.current.value
+      ) {
+        setBuildError(true);
+      } else {
+        setBuildError(false);
+      }
+    }
+    if (min_floor.current && max_floor.current) {
+      if (+min_floor.current.value > +max_floor.current.value) {
+        setFloorError(true);
+      } else {
+        setFloorError(false);
+      }
+    }
+    if (min_count_rooms.current && max_count_rooms.current) {
+      if (+min_count_rooms.current.value > +max_count_rooms.current.value) {
+        setRoomError(true);
+      } else {
+        setRoomError(false);
       }
     }
   };
@@ -215,7 +228,7 @@ const Filter: FC<IFilter> = ({ setFilter }) => {
               type="text"
               placeholder="Ваш ответ"
               value={city}
-              onChange={(value) => inputOnChange(value, ymap)}
+              onChange={(value) => HandleMapInput(value, ymap)}
             />
             <div className={styles.map}>
               <YMaps query={{ apikey: "a397206b-3df1-47d3-b87e-de0031179a0e" }}>
@@ -292,9 +305,11 @@ const Filter: FC<IFilter> = ({ setFilter }) => {
             <FitlerToggle id="owner" text="Только от собственника" />
           </div>
           <div className={styles.content_line}>
-            <div className={styles.days}>
+            <div className={styles.max_min_inputs}>
               <div className={styles.title}>На какой срок (в днях)</div>
-              <div className={styles.error}>минимум</div>
+              <div className={daysError ? styles.error : styles.hide_error}>
+                минимальное значение не может больше максимального
+              </div>
               <div className={styles.content}>
                 <div className={styles.min_input}>
                   <input
@@ -314,16 +329,27 @@ const Filter: FC<IFilter> = ({ setFilter }) => {
                 </div>
               </div>
             </div>
-            <div className={styles.price_per_month}>
+            <div className={styles.max_min_inputs}>
               <div className={styles.title}>Цена</div>
+              <div className={costError ? styles.error : styles.hide_error}>
+                минимальное значение не может больше максимального
+              </div>
               <div className={styles.content}>
                 <div className={styles.min_input}>
-                  <input className={styles.input} placeholder="Цена от"   ref={min_cost}
-                    onChange={(v) => handleInputChange(min_cost)}/>
+                  <input
+                    className={styles.input}
+                    placeholder="Цена от"
+                    ref={min_cost}
+                    onChange={(v) => handleInputChange(min_cost)}
+                  />
                 </div>
                 <div className={styles.max_input}>
-                  <input className={styles.input} placeholder="и до"   ref={max_cost}
-                    onChange={(v) => handleInputChange(max_cost)}/>
+                  <input
+                    className={styles.input}
+                    placeholder="и до"
+                    ref={max_cost}
+                    onChange={(v) => handleInputChange(max_cost)}
+                  />
                 </div>
               </div>
             </div>
@@ -335,57 +361,101 @@ const Filter: FC<IFilter> = ({ setFilter }) => {
             <FitlerToggle id="penalty" text="Есть штрафы" />
           </div>
           <div className={styles.content_line}>
-            <div className={styles.days}>
+            <div className={styles.max_min_inputs}>
               <div className={styles.title}>Комуннальный услуги</div>
+              <div className={utilError ? styles.error : styles.hide_error}>
+                минимальное значение не может больше максимального
+              </div>
               <div className={styles.content}>
                 <div className={styles.min_input}>
-                  <input className={styles.input} placeholder="Цена от"   ref={min_cost_utilities}
-                    onChange={(v) => handleInputChange(min_cost_utilities)}/>
+                  <input
+                    className={styles.input}
+                    placeholder="Цена от"
+                    ref={min_cost_utilities}
+                    onChange={(v) => handleInputChange(min_cost_utilities)}
+                  />
                 </div>
                 <div className={styles.max_input}>
-                  <input className={styles.input} placeholder="и до"  ref={max_cost_utilities}
-                    onChange={(v) => handleInputChange(max_cost_utilities)} />
+                  <input
+                    className={styles.input}
+                    placeholder="и до"
+                    ref={max_cost_utilities}
+                    onChange={(v) => handleInputChange(max_cost_utilities)}
+                  />
                 </div>
               </div>
             </div>
-            <div className={styles.price_per_month}>
+            <div className={styles.max_min_inputs}>
               <div className={styles.title}>Количество комнат</div>
+              <div className={roomError ? styles.error : styles.hide_error}>
+                минимальное значение не может больше максимального
+              </div>
               <div className={styles.content}>
                 <div className={styles.min_input}>
-                  <input className={styles.input} placeholder="От"   ref={min_count_rooms}
-                    onChange={(v) => handleInputChange(min_count_rooms)}/>
+                  <input
+                    className={styles.input}
+                    placeholder="От"
+                    ref={min_count_rooms}
+                    onChange={(v) => handleInputChange(min_count_rooms)}
+                  />
                 </div>
                 <div className={styles.max_input}>
-                  <input className={styles.input} placeholder="и до"  ref={max_count_rooms}
-                    onChange={(v) => handleInputChange(max_count_rooms)} />
+                  <input
+                    className={styles.input}
+                    placeholder="и до"
+                    ref={max_count_rooms}
+                    onChange={(v) => handleInputChange(max_count_rooms)}
+                  />
                 </div>
               </div>
             </div>
           </div>
           <div className={styles.content_line}>
-            <div className={styles.days}>
+            <div className={styles.max_min_inputs}>
               <div className={styles.title}>Этаж квартиры</div>
+              <div className={floorError ? styles.error : styles.hide_error}>
+                минимальное значение не может больше максимального
+              </div>
               <div className={styles.content}>
                 <div className={styles.min_input}>
-                  <input className={styles.input} placeholder="От"  ref={min_floor}
-                    onChange={(v) => handleInputChange(min_floor)} />
+                  <input
+                    className={styles.input}
+                    placeholder="От"
+                    ref={min_floor}
+                    onChange={(v) => handleInputChange(min_floor)}
+                  />
                 </div>
                 <div className={styles.max_input}>
-                  <input className={styles.input} placeholder="и до"   ref={max_floor}
-                    onChange={(v) => handleInputChange(max_floor)}/>
+                  <input
+                    className={styles.input}
+                    placeholder="и до"
+                    ref={max_floor}
+                    onChange={(v) => handleInputChange(max_floor)}
+                  />
                 </div>
               </div>
             </div>
-            <div className={styles.price_per_month}>
+            <div className={styles.max_min_inputs}>
               <div className={styles.title}>Всего этажей</div>
+              <div className={buildError ? styles.error : styles.hide_error}>
+                минимальное значение не может больше максимального
+              </div>
               <div className={styles.content}>
                 <div className={styles.min_input}>
-                  <input className={styles.input} placeholder="От"   ref={min_building_floor}
-                    onChange={(v) => handleInputChange(min_building_floor)}/>
+                  <input
+                    className={styles.input}
+                    placeholder="От"
+                    ref={min_building_floor}
+                    onChange={(v) => handleInputChange(min_building_floor)}
+                  />
                 </div>
                 <div className={styles.max_input}>
-                  <input className={styles.input} placeholder="и до"  ref={max_building_floor}
-                    onChange={(v) => handleInputChange(max_building_floor)} />
+                  <input
+                    className={styles.input}
+                    placeholder="и до"
+                    ref={max_building_floor}
+                    onChange={(v) => handleInputChange(max_building_floor)}
+                  />
                 </div>
               </div>
             </div>
@@ -395,7 +465,12 @@ const Filter: FC<IFilter> = ({ setFilter }) => {
             <div className={styles.toggle_list}>
               {repair.map((tog, ind) => {
                 return (
-                  <div className={`${styles.toggle} ${styles.choosen_toggle}`}>
+                  <div
+                    className={`${styles.toggle} ${
+                      activeRepair === ind ? styles.choosen_toggle : ""
+                    }`}
+                    onClick={() => setActiveRepair(ind)}
+                  >
                     {tog}
                   </div>
                 );
@@ -407,7 +482,12 @@ const Filter: FC<IFilter> = ({ setFilter }) => {
             <div className={styles.toggle_list}>
               {houseType.map((tog, ind) => {
                 return (
-                  <div className={`${styles.toggle} ${styles.choosen_toggle}`}>
+                  <div
+                    className={`${styles.toggle} ${
+                      activeBuild === ind ? styles.choosen_toggle : ""
+                    }`}
+                    onClick={() => setActiveBuild(ind)}
+                  >
                     {tog}
                   </div>
                 );
@@ -419,7 +499,12 @@ const Filter: FC<IFilter> = ({ setFilter }) => {
             <div className={styles.toggle_list}>
               {soundIsolation.map((tog, ind) => {
                 return (
-                  <div className={`${styles.toggle} ${styles.choosen_toggle}`}>
+                  <div
+                    className={`${styles.toggle} ${
+                      activeSound === ind ? styles.choosen_toggle : ""
+                    }`}
+                    onClick={() => setActiveSound(ind)}
+                  >
                     {tog}
                   </div>
                 );
@@ -431,7 +516,11 @@ const Filter: FC<IFilter> = ({ setFilter }) => {
             <div className={styles.toggle_list}>
               {soundIsolation.map((tog, ind) => {
                 return (
-                  <div className={`${styles.toggle} ${styles.choosen_toggle}`}>
+                  <div
+                    className={`${styles.toggle} ${
+                      activeRepair === ind ? styles.choosen_toggle : ""
+                    }`}
+                  >
                     {tog}
                   </div>
                 );
@@ -484,8 +573,13 @@ const Filter: FC<IFilter> = ({ setFilter }) => {
           <div className={styles.content_line}>
             <div className={styles.photo_count_and_only_favorites}>
               <span className={styles.title}>Минимум фоторгафий</span>
-              <input type="text" className={styles.input} defaultValue={0}   ref={min_count_photos}
-                    onChange={(v) => handleInputChange(min_count_photos)}/>
+              <input
+                type="text"
+                className={styles.input}
+                defaultValue={0}
+                ref={min_count_photos}
+                onChange={(v) => handleInputChange(min_count_photos)}
+              />
               <FitlerToggle
                 id="favorits"
                 text="Показывать только избранные объявления"

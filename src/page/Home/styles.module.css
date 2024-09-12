@@ -7,14 +7,74 @@
   padding: 2rem 0;
   gap: 2rem;
 }
+.home .messages_icon {
+  position: absolute;
+  bottom: 20px;
+  right: 40px;
+  z-index: 100;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #5755c4;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  cursor: pointer;
+}
+.home .messages_icon svg {
+  width: 60%;
+  height: 60%;
+}
+.home .messages_icon .new_messages_count {
+  width: 23px;
+  height: 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f51717;
+  border-radius: 50%;
+  position: absolute;
+  top: -3px;
+  right: -3px;
+}
+.home .stories_module {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3490196078);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+.home .stories_module .exit {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  right: 40px;
+  top: 20px;
+  cursor: pointer;
+}
+@media (max-width: 500px) {
+  .home .stories_module .exit {
+    right: 10px;
+    top: 10px;
+  }
+}
+@media (max-width: 370px) {
+  .home .stories_module .exit {
+    right: 5px;
+    top: 0px;
+  }
+}
 .home .stories {
-  max-width: min(1200px, 100%);
-  width: -moz-fit-content;
-  width: fit-content;
-  margin-inline: auto;
+  width: 78%;
+  min-height: 200px;
+  max-height: 400px;
   overflow-x: auto;
-  min-height: -moz-fit-content;
-  min-height: fit-content;
   padding: 0 1rem;
   padding-bottom: 1rem;
   display: flex;
@@ -24,13 +84,14 @@
   display: none;
 }
 .home .stories .card {
+  min-width: 100px;
+  max-width: 200px;
   background-color: black;
-  min-width: 7rem;
-  aspect-ratio: 4/7;
   border-radius: 5px;
-}
-.home .stories .card:nth-child(2n) {
-  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 .home .cards {
   padding: 0 1rem;
@@ -92,5 +153,24 @@
   }
   .home .cards a {
     width: 25%;
+  }
+}
+@media (max-width: 800px) {
+  .home .messages_icon {
+    right: 25px;
+    bottom: 80px;
+  }
+  .home .articles {
+    width: 60%;
+  }
+}
+@media (max-width: 650px) {
+  .home .articles {
+    width: 70%;
+  }
+}
+@media (max-width: 450px) {
+  .home .articles {
+    width: 80%;
   }
 }/*# sourceMappingURL=styles.module.css.map */

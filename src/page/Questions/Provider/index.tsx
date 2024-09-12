@@ -4,7 +4,7 @@ import React, { createContext, useState } from "react";
 
 export type QuestionType = {
   id: number;
-  answer: any
+  answer: any;
   content: string;
   subheading?: string;
   anotherText?: {
@@ -20,23 +20,24 @@ export type QuestionType = {
     second: string;
     third: string;
   };
-  Optionsvalues?: string[]
-  labels?: string[]
+  Optionsvalues?: string[];
+  labels?: string[];
   type:
-  | "text"
-  | "yesNo"
-  | "yesNoUnsure"
-  | "slider"
-  | "file"
-  | "multiFile"
-  | "switch"
-  | "twoNumber"
-  | "number"
-  | "toggles"
-  | "miltiOption"
-  | "checklist"
-  | "textAndMap"
-  | "description";
+    | "text"
+    | "yesNo"
+    | "yesNoUnsure"
+    | "slider"
+    | "file"
+    | "multiFile"
+    | "switch"
+    | "twoNumber"
+    | "number"
+    | "toggles"
+    | "miltiOption"
+    | "checklist"
+    | "textAndMap"
+    | "description"
+    | "days";
 };
 
 export type AnswerType = {
@@ -61,11 +62,9 @@ type ProviderProps = {
 export const QuestionsContext = createContext<ContextProps>({
   questions: [],
   answers: [],
-  addAnswer: () => { },
-  setCurrentId: () => { },
+  addAnswer: () => {},
+  setCurrentId: () => {},
 });
-
-
 
 export default function QuestionProvider(props: ProviderProps) {
   const [answers, setAnswers] = useState<AnswerType[]>([]);
@@ -83,9 +82,9 @@ export default function QuestionProvider(props: ProviderProps) {
     setAnswers((prev) =>
       answers.map((answer) => answer.id).includes(answer.id)
         ? [
-          ...prev.filter((currentAnswer) => currentAnswer.id !== answer.id),
-          answer,
-        ]
+            ...prev.filter((currentAnswer) => currentAnswer.id !== answer.id),
+            answer,
+          ]
         : [...prev, answer]
     );
   }

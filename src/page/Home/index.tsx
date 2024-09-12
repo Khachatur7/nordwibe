@@ -33,7 +33,6 @@ const Home = () => {
   }
 
   useEffect(() => {
-  
     calcNewMessages.current = 0;
     messages.notifications.map((n) => {
       if (n[0] == 1) {

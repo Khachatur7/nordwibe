@@ -24,7 +24,7 @@ export default ({ children }: { children: React.ReactNode }) => {
     {
       id: 3,
       content: "На какой срок рассчитываю сдать",
-      type: "yesNoUnsure",
+      type: "days",
       answer: 0
     },
     {

@@ -7,6 +7,14 @@
   z-index: 1;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   height: 4rem;
+  position: relative;
+}
+.nav .navigation_filter {
+  max-width: 35px;
+  max-height: 35px;
+  position: absolute;
+  right: 20px;
+  top: 20%;
 }
 .nav .logo {
   margin: 1rem;
@@ -26,4 +34,11 @@
 }
 .nav li .big {
   font-size: 1.1rem;
+}
+
+.filter_logo {
+  position: absolute;
+  right: 30px;
+  top: 30%;
+  cursor: pointer;
 }/*# sourceMappingURL=styles.module.css.map */
