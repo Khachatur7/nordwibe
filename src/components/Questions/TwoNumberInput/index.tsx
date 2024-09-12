@@ -1,12 +1,10 @@
 "use client";
-
 import Form from "@/components/Form";
 import FormHeading from "@/components/Form/Heading";
 import Button from "@/components/Button";
 import React, { useRef, useState } from "react";
 import { QuestionType } from "@/page/Questions/Provider";
 import styles from "../styles.module.scss";
-import TextInput from "@/components/Form/TextInput";
 
 type QuestionProps = {
     question: QuestionType;

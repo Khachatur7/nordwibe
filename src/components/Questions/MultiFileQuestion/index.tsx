@@ -39,10 +39,10 @@ export default function MultiFileQuestion(props: QuestionProps) {
         <SubHeading>{props.question.subheading}</SubHeading>
       )}
 
-<FileUploader
-  onChange={(files) => handleFileChange(files)}
-  accept=".jpg, .jpeg, .png"
-/>
+      <FileUploader
+        onChange={(files) => handleFileChange(files)}
+        accept=".jpg, .jpeg, .png"
+      />
 
       <ul>
         {answers.map((answer, index) => (

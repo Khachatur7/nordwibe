@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { QuestionsContext } from "../Provider";
 import TextQuestion from "@/components/Questions/Text";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import ThreeOptionQuestion from "@/components/Questions/ThreeOption";
 import TwoOptionQuestion from "@/components/Questions/TwoOption";
 import SliderQuestion from "@/components/Questions/Slider";
@@ -16,6 +16,7 @@ import CheckList from "@/components/Questions/CheckList";
 import TextAndMap from "@/components/Questions/TextAndMap";
 import Description from "@/components/Questions/Description";
 import NumberInput from "@/components/Questions/NumberInput";
+import Days from "@/components/Questions/Days";
 
 type QuestionProps = {
   id: string;
@@ -160,11 +161,11 @@ export default function Question({ id }: QuestionProps) {
         ></Description>
       )}
       {question?.type === "days" && (
-        <TwoNumberInput
+        <Days
           onAnswer={handleAnswer}
           question={question}
           answer={question.answer}
-        ></TwoNumberInput>
+        ></Days>
       )}
     </>
   );
